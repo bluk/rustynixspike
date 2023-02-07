@@ -75,12 +75,12 @@
       packages = forAllSystems (system:
         {
           inherit (nixpkgsFor.${system}) rustynixspike;
-        });
 
-      # The default package for 'nix build'. This makes sense if the
-      # flake provides only one package or there is a clear "main"
-      # package.
-      defaultPackage = forAllSystems (system: self.packages.${system}.rustynixspike);
+	  # The default package for 'nix build'. This makes sense if the
+	  # flake provides only one package or there is a clear "main"
+	  # package.
+          default = self.packages.${system}.rustynixspike;
+        });
 
       # Provide a 'nix develop' environment for interactive hacking.
       devShell = forAllSystems (system: self.packages.${system}.rustynixspike.override { inShell = true; });
