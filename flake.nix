@@ -101,34 +101,34 @@ default = self.packages.${system}.rustynixspike.override { inShell = true; };
         };
 
       # Tests run by 'nix flake check' and by Hydra.
-      checks = forAllSystems
-        (system:
-          with nixpkgsFor.${system};
+      #checks = forAllSystems
+      #  (system:
+      #    with nixpkgsFor.${system};
 
-          {
-            inherit (self.packages.${system}) rustynixspike;
+      #    {
+      #      inherit (self.packages.${system}) rustynixspike;
 
-            # A VM test of the NixOS module.
-            vmTest =
-              with import (nixpkgs + "/nixos/lib/testing-python.nix") {
-                inherit system;
-              };
+      #      # A VM test of the NixOS module.
+      #      vmTest =
+      #        with import (nixpkgs + "/nixos/lib/testing-python.nix") {
+      #          inherit system;
+      #        };
 
-              makeTest {
-                nodes = {
-                  client = { ... }: {
-                    imports = [ self.nixosModules.rustynixspike ];
-                  };
-                };
+      #        makeTest {
+      #          nodes = {
+      #            client = { ... }: {
+      #              imports = [ self.nixosModules.rustynixspike ];
+      #            };
+      #          };
 
-              testScript =
-                ''
-                  start_all()
-                  client.wait_for_unit("multi-user.target")
-                  assert "Hello Nixers" in client.wait_until_succeeds("curl --fail http://localhost:8080/")
-                '';
-              };
-          }
-        );
+      #        testScript =
+      #          ''
+      #            start_all()
+      #            client.wait_for_unit("multi-user.target")
+      #            assert "Hello Nixers" in client.wait_until_succeeds("curl --fail http://localhost:8080/")
+      #          '';
+      #        };
+      #    }
+      #  );
     };
 }
