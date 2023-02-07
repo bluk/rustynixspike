@@ -1,5 +1,5 @@
 [package]
-name = "rust-web-server"
+name = "rustynixspike"
 version = "0.1.0"
 authors = ["Eelco Dolstra <edolstra@gmail.com>"]
 edition = "2018"

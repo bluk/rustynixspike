@@ -32,8 +32,8 @@
       # A Nixpkgs overlay.
       overlay = final: prev: {
 
-        rust-web-server = with final; final.callPackage ({ inShell ? false }: stdenv.mkDerivation rec {
-          name = "rust-web-server-${version}";
+        rustynixspike = with final; final.callPackage ({ inShell ? false }: stdenv.mkDerivation rec {
+          name = "rustynixspike-${version}";
 
           # In 'nix develop', we don't need a copy of the source tree
           # in the Nix store.
@@ -74,26 +74,26 @@
       # Provide some binary packages for selected system types.
       packages = forAllSystems (system:
         {
-          inherit (nixpkgsFor.${system}) rust-web-server;
+          inherit (nixpkgsFor.${system}) rustynixspike;
         });
 
       # The default package for 'nix build'. This makes sense if the
       # flake provides only one package or there is a clear "main"
       # package.
-      defaultPackage = forAllSystems (system: self.packages.${system}.rust-web-server);
+      defaultPackage = forAllSystems (system: self.packages.${system}.rustynixspike);
 
       # Provide a 'nix develop' environment for interactive hacking.
-      devShell = forAllSystems (system: self.packages.${system}.rust-web-server.override { inShell = true; });
+      devShell = forAllSystems (system: self.packages.${system}.rustynixspike.override { inShell = true; });
 
       # A NixOS module.
-      nixosModules.rust-web-server =
+      nixosModules.rustynixspike =
         { pkgs, ... }:
         {
           nixpkgs.overlays = [ self.overlay ];
 
-          systemd.services.rust-web-server = {
+          systemd.services.rustynixspike = {
             wantedBy = [ "multi-user.target" ];
-            serviceConfig.ExecStart = "${pkgs.rust-web-server}/bin/rust-web-server";
+            serviceConfig.ExecStart = "${pkgs.rustynixspike}/bin/rustynixspike";
           };
         };
 
@@ -103,7 +103,7 @@
           with nixpkgsFor.${system};
 
           {
-            inherit (self.packages.${system}) rust-web-server;
+            inherit (self.packages.${system}) rustynixspike;
 
             # A VM test of the NixOS module.
             vmTest =
@@ -114,7 +114,7 @@
               makeTest {
                 nodes = {
                   client = { ... }: {
-                    imports = [ self.nixosModules.rust-web-server ];
+                    imports = [ self.nixosModules.rustynixspike ];
                   };
                 };
 
