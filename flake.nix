@@ -25,12 +25,12 @@
       forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
 
       # Nixpkgs instantiated for supported system types.
-      nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; overlays = [ self.overlay ]; });
+      nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; overlays = [ self.overlays.default ]; });
 
     in {
 
       # A Nixpkgs overlay.
-      overlay = final: prev: {
+      overlays.default = final: prev: {
 
         rustynixspike = with final; final.callPackage ({ inShell ? false }: stdenv.mkDerivation rec {
           name = "rustynixspike-${version}";
@@ -89,7 +89,7 @@
       nixosModules.rustynixspike =
         { pkgs, ... }:
         {
-          nixpkgs.overlays = [ self.overlay ];
+          nixpkgs.overlays = [ self.overlays.default ];
 
           systemd.services.rustynixspike = {
             wantedBy = [ "multi-user.target" ];
