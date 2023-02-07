@@ -83,7 +83,10 @@
         });
 
       # Provide a 'nix develop' environment for interactive hacking.
-      devShell = forAllSystems (system: self.packages.${system}.rustynixspike.override { inShell = true; });
+      devShells = forAllSystems (system: {
+default = self.packages.${system}.rustynixspike.override { inShell = true; };
+}
+);
 
       # A NixOS module.
       nixosModules.rustynixspike =
