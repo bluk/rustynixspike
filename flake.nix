@@ -57,6 +57,10 @@
 
       };
 
+      legacyPackages = forAllSystems (system: {
+        inherit (nixpkgsFor.${system}) rustynixspike;
+      });
+
       # Provide some binary packages for selected system types.
       packages = forAllSystems (system: {
         inherit (nixpkgsFor.${system}) rustynixspike;
